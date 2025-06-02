@@ -1,0 +1,122 @@
+/**
+ * @license
+ * Copyright 2023 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import * as Blockly from 'blockly';
+import { blocks as printBlocks } from './blocks/IO/printf';
+import { blocks as mainBlocks } from './blocks/function/main';
+import { blocks as returnBlocks } from './blocks/function/return';
+import { blocks as stdioBlocks } from './blocks/library/stdio';
+import { blocks as math_variableBlocks } from './blocks/variable/math_variable';
+import { blocks as math_hintBlocks } from './blocks/variable/math_hint';
+
+import { cGenerator } from './generators/cgenerators';
+import { save, load } from './serialization';
+import { toolbox } from './toolbox';
+import './index.css';
+
+// Combine and register the blocks with Blockly
+const blocks = {
+  ...printBlocks,
+  ...mainBlocks,
+  ...stdioBlocks,
+  ...returnBlocks,
+  ...math_variableBlocks,
+  ...math_hintBlocks
+};
+
+Blockly.common.defineBlocks(blocks);
+const myTheme = Blockly.Theme.defineTheme('largeTextTheme', {
+  base: Blockly.Themes.Classic,
+  fontStyle: {
+    size: 13,  // Default is typically around 12px; increase as needed
+  }
+});
+
+// Set up UI elements and inject Blockly
+const codeDiv = document.getElementById('generatedCode').firstChild;
+const outputDiv = document.getElementById('output');
+const blocklyDiv = document.getElementById('blocklyDiv');
+const ws = Blockly.inject(blocklyDiv, { 
+                          toolbox,
+                          theme: myTheme });
+
+// Function to update the code display
+const runCode = () => {
+  const code = cGenerator.workspaceToCode(ws);
+  codeDiv.innerText = code; // Update generated code display
+};
+
+// Whenever the workspace changes, update code display
+ws.addChangeListener((e) => {
+  if (
+    e.isUiEvent ||
+    e.type == Blockly.Events.FINISHED_LOADING ||
+    ws.isDragging()
+  ) {
+    return;
+  }
+  runCode();
+});
+
+ws.addChangeListener((event) => {
+  if (event.type === Blockly.Events.BLOCK_CREATE) {
+    const block = ws.getBlockById(event.blockId);
+    if (block && block.type === 'main' && block.comment) {
+      block.comment.setEditable(false);
+    }
+  }
+});
+
+// Add button event listener for execution
+document.getElementById('runButton').addEventListener('click', executeCode);
+
+// Get the run button element
+const runButton = document.getElementById('runButton');
+
+// Function to execute C code via the server
+async function executeCode() {
+  console.log('Executing code...');  // Log when execution starts
+  runButton.disabled = true;  // Disable the button to prevent multiple clicks
+  const code = cGenerator.workspaceToCode(ws);
+  codeDiv.innerText = code;
+  outputDiv.innerText = 'Running...';  // Show "Running..." while waiting
+
+  try {
+    // Set a 10-second timeout for the request
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Request timed out')), 10000)
+    );
+
+    // Send the request and race it against the timeout
+    const response = await Promise.race([
+      fetch('http://localhost:3000/execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: code, input: '' })
+      }),
+      timeoutPromise
+    ]);
+
+    console.log('Response received:', response.status);  // Log the response status
+    const result = await response.json();
+    console.log('Result:', result);  // Log the result
+
+    if (result.error) {
+      outputDiv.innerText = `Error: ${result.error}`;
+    } else {
+      outputDiv.innerHTML = result.output.replace(/\n/g, '<br>');
+    }
+  } catch (err) {
+    console.error('Execution error:', err);
+    if (err.message === 'Request timed out') {
+      outputDiv.innerText = 'Error: Request timed out';
+    } else {
+      outputDiv.innerText = `Error: ${err.message}`;
+    }
+  } finally {
+    runButton.disabled = false;  // Re-enable the button after execution
+  }
+}
