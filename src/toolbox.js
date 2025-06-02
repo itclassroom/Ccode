@@ -56,18 +56,16 @@ export const toolbox = {
       "name": "變數 Variables",
       "contents":[
         {
-          "kind":"category",
-          "name":"數字類",
-          "contents":[
-            {
-            "kind" : "block",
-            "type" : "math_variable"
-            },
-            {
-            "kind" : "block",
-            "type" : "constant_value"
-            },
-          ]
+          "kind" : "block",
+          "type" : "math_variable"
+        },
+        {
+          "kind" : "block",
+          "type" : "variable_name_input"
+        },
+        {
+          "kind" : "block",
+          "type" : "assignment"
         },
       ]
     }

@@ -6,7 +6,7 @@
 
 import * as Blockly from 'blockly/core';
 
-Blockly.Blocks['constant_value'] = {
+Blockly.Blocks['math_constant'] = {
   init: function() {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([
@@ -24,4 +24,4 @@ Blockly.Blocks['constant_value'] = {
   }
 };
 
-export const blocks = { constant_value: Blockly.Blocks['constant_value'] };
+export const blocks = { constant_value: Blockly.Blocks['math_constant'] };

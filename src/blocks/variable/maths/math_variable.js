@@ -8,9 +8,6 @@ import * as Blockly from 'blockly/core';
 
 Blockly.Blocks['math_variable'] = {
   init: function() {
-    this.appendDummyInput()
-        .appendField("數字類");
-
     this.appendValueInput("VARIABLENAMES")
         .appendField(new Blockly.FieldDropdown([["整數","int"], ["浮點數","float"], ["雙精度浮點數","double"]]), "list")
         .appendField(new Blockly.FieldLabel(" "), "SPACE")

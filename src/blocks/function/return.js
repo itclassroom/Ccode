@@ -13,7 +13,8 @@ Blockly.Blocks['return'] = {
         .appendField(new Blockly.FieldTextInput("0"), "VALUE")
         .appendField(" ;");
     this.setColour(230);
-    this.setPreviousStatement(true, null)
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
  this.setTooltip("");
  this.setHelpUrl("");
   }

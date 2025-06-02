@@ -3,9 +3,10 @@ import { blocks as printBlocks } from './blocks/IO/printf';
 import { blocks as mainBlocks } from './blocks/function/main';
 import { blocks as returnBlocks } from './blocks/function/return';
 import { blocks as stdioBlocks } from './blocks/library/stdio';
-import { blocks as math_variableBlocks } from './blocks/variable/math_variable';
-import { blocks as math_hintBlocks } from './blocks/variable/math_hint';
-
+import { blocks as math_variableBlocks } from './blocks/variable/maths/math_variable.js';
+import { blocks as math_hintBlocks } from './blocks/variable/maths/math_constant.js';
+import { blocks as variable_name_inputBlocks } from './blocks/variable/variable.js'
+import { blocks as assignmentBlocks } from './blocks/variable/assignment.js';
 import { cGenerator } from './generators/cgenerators';
 import { save, load } from './serialization';
 import { toolbox } from './toolbox';
@@ -19,16 +20,23 @@ const blocks = {
   ...stdioBlocks,
   ...returnBlocks,
   ...math_variableBlocks,
-  ...math_hintBlocks
+  ...math_hintBlocks,
+  ...variable_name_inputBlocks,
+  ...assignmentBlocks
 };
 
-Blockly.common.defineBlocks(blocks);
 const myTheme = Blockly.Theme.defineTheme('largeTextTheme', {
   base: Blockly.Themes.Classic,
   fontStyle: {
-    size: 13,  // Default is typically around 12px; increase as needed
-  }
+    size: 10,  // Default is typically around 12px; increase as needed
+  },
+  componentStyles:{
+   workspaceBackgroundColour: '#81CFF4',
+   toolboxBackgroundColour: '#4287f5'
+}
 });
+
+
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode').firstChild;
@@ -36,7 +44,10 @@ const outputDiv = document.getElementById('output');
 const blocklyDiv = document.getElementById('blocklyDiv');
 const ws = Blockly.inject(blocklyDiv, { 
                           toolbox,
-                          theme: myTheme });
+                          theme: myTheme, 
+                          renderer: 'zelos'
+                          });
+
 
 // Function to update the code display
 const runCode = () => {

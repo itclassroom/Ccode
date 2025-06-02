@@ -3,25 +3,31 @@ body {
   max-width: 100vw;
 }
 
-        
 #header {
   background-color: #174497;
   color: white;
   height: 2rem;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
 }
 
-
+#author{
+  color:#EC12F7;
+}
 pre,
 code {
   overflow: auto;
+  font-size: 15px;
+  margin: 0; /* Remove default margins */
 }
 
 #pageContainer {
   display: flex;
   width: 100%;
-  max-width:100vw;
-  height: 100vh;
+  max-width: 100vw;
+  height: calc(100vh - 2rem); /* Adjust for header height */
 }
 
 #blocklyDiv {
@@ -36,30 +42,103 @@ code {
   width: 400px;
   flex: 0 0 400px;
   overflow: auto;
+  padding: 0;
+  margin: 0;
 }
 
 #generatedCode {
-  height: 50%;
-  background-color: rgb(247, 240, 228);
+  flex: 1; /* Equal height with #output */
+  background-color: #75613E;
+  margin: 0;
+  padding: 10px;
 }
 
 #output {
-  height: 50%;
+  flex: 1; /* Equal height with #generatedCode */
   background-color: black;
   color: white;
+  line-height: 1.2;
+  white-space: pre-wrap;
+  margin: 0;
+  padding: 10px;
+  font-size: 15px;
 }
 
-
-
-/* Increase text size for block labels */
-/*.blocklyText {
-  fill: black !important;
-}*/
+#menubar{
+  background-color: #75613E;
+}
 
 .blocklyMainBlock .blocklyText {
   fill: black !important;
 }
 
-.blocklyText{
+.blocklyText {
   fill: black !important;
+}
+
+#runButton {
+  background-color: #28a745;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+
+#runButton:active {
+  transform: scale(0.95);
+}
+
+#runButton:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Responsive design for iPhone 13 Pro (portrait and landscape) */
+@media (max-width: 844px) {
+  #pageContainer {
+    flex-direction: column;
+    height: auto;
+  }
+
+  #blocklyDiv {
+    min-width: 100%;
+    height: 50vh;
+  }
+
+  #outputPane {
+    width: 100%;
+    flex: 1;
+  }
+
+  #generatedCode,
+  #output {
+    height: auto;
+    flex: 1;
+  }
+
+  #runButton {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+}
+
+/* Responsive design for iPad mini (portrait and landscape) */
+@media (min-width: 744px) and (max-width: 1133px) {
+  #blocklyDiv {
+    min-width: 50%;
+  }
+
+  #outputPane {
+    width: 50%;
+  }
+
+  #runButton {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
 }
