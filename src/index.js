@@ -1,9 +1,3 @@
-/**
- * @license
- * Copyright 2023 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import * as Blockly from 'blockly';
 import { blocks as printBlocks } from './blocks/IO/printf';
 import { blocks as mainBlocks } from './blocks/function/main';
@@ -16,6 +10,7 @@ import { cGenerator } from './generators/cgenerators';
 import { save, load } from './serialization';
 import { toolbox } from './toolbox';
 import './index.css';
+import { executeCCode } from './api.js';
 
 // Combine and register the blocks with Blockly
 const blocks = {
@@ -76,47 +71,19 @@ document.getElementById('runButton').addEventListener('click', executeCode);
 // Get the run button element
 const runButton = document.getElementById('runButton');
 
-// Function to execute C code via the server
+// Function to execute C code via the Piston API
 async function executeCode() {
-  console.log('Executing code...');  // Log when execution starts
-  runButton.disabled = true;  // Disable the button to prevent multiple clicks
+  console.log('Executing code...');
+  runButton.disabled = true;
   const code = cGenerator.workspaceToCode(ws);
   codeDiv.innerText = code;
-  outputDiv.innerText = 'Running...';  // Show "Running..." while waiting
+  outputDiv.innerText = 'Running...';
 
-  try {
-    // Set a 10-second timeout for the request
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Request timed out')), 10000)
-    );
-
-    // Send the request and race it against the timeout
-    const response = await Promise.race([
-      fetch('http://localhost:3000/execute', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: code, input: '' })
-      }),
-      timeoutPromise
-    ]);
-
-    console.log('Response received:', response.status);  // Log the response status
-    const result = await response.json();
-    console.log('Result:', result);  // Log the result
-
-    if (result.error) {
-      outputDiv.innerText = `Error: ${result.error}`;
-    } else {
-      outputDiv.innerHTML = result.output.replace(/\n/g, '<br>');
-    }
-  } catch (err) {
-    console.error('Execution error:', err);
-    if (err.message === 'Request timed out') {
-      outputDiv.innerText = 'Error: Request timed out';
-    } else {
-      outputDiv.innerText = `Error: ${err.message}`;
-    }
-  } finally {
-    runButton.disabled = false;  // Re-enable the button after execution
+  const result = await executeCCode(code, '');
+  if (result.error) {
+    outputDiv.innerText = `Error: ${result.error}`;
+  } else {
+    outputDiv.innerHTML = result.output.replace(/\n/g, '<br>');
   }
+  runButton.disabled = false;
 }
