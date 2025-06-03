@@ -3,10 +3,11 @@ import { blocks as printBlocks } from './blocks/IO/printf';
 import { blocks as mainBlocks } from './blocks/function/main';
 import { blocks as returnBlocks } from './blocks/function/return';
 import { blocks as stdioBlocks } from './blocks/library/stdio';
-import { blocks as math_variableBlocks } from './blocks/variable/maths/math_variable.js';
-import { blocks as math_hintBlocks } from './blocks/variable/maths/math_constant.js';
+import { blocks as define_variableBlocks } from './blocks/variable/define_variable.js';
+import { blocks as math_constantBlocks } from './blocks/variable/math_constant.js';
 import { blocks as variable_name_inputBlocks } from './blocks/variable/variable.js'
 import { blocks as assignmentBlocks } from './blocks/variable/assignment.js';
+import { blocks as literal_valueBlocks } from './blocks/variable/literal_value.js';
 import { cGenerator } from './generators/cgenerators';
 import { save, load } from './serialization';
 import { toolbox } from './toolbox';
@@ -19,10 +20,11 @@ const blocks = {
   ...mainBlocks,
   ...stdioBlocks,
   ...returnBlocks,
-  ...math_variableBlocks,
-  ...math_hintBlocks,
+  ...define_variableBlocks,
+  ...math_constantBlocks,
   ...variable_name_inputBlocks,
-  ...assignmentBlocks
+  ...assignmentBlocks,
+  ...literal_valueBlocks
 };
 
 const myTheme = Blockly.Theme.defineTheme('largeTextTheme', {

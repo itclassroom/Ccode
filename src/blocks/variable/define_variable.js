@@ -6,7 +6,7 @@
 
 import * as Blockly from 'blockly/core';
 
-Blockly.Blocks['math_variable'] = {
+Blockly.Blocks['define_variable'] = {
   init: function() {
     this.appendValueInput("VARIABLENAMES")
         .appendField(new Blockly.FieldDropdown([["整數","int"], ["浮點數","float"], ["雙精度浮點數","double"]]), "list")
@@ -23,10 +23,10 @@ Blockly.Blocks['math_variable'] = {
     this.setTooltip("");
     this.setHelpUrl("");
 
-    const shadowBlock = this.workspace.newBlock('text');
+    const shadowBlock = this.workspace.newBlock('variable_name_input');
     shadowBlock.setShadow(true);
-    shadowBlock.getField('TEXT').setValue("變數名稱");
-    shadowBlock.getField('TEXT').setValidator(function(newValue) {
+    shadowBlock.getField('VAR_NAME').setValue("變數名稱");
+    shadowBlock.getField('VAR_NAME').setValidator(function(newValue) {
         if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(newValue)) {
             return newValue;
         }
@@ -36,4 +36,5 @@ Blockly.Blocks['math_variable'] = {
     this.getInput('VARIABLENAMES').connection.connect(shadowBlock.outputConnection);
   }
 };
-export const blocks = { math_variable: Blockly.Blocks['math_variable'] };
+
+export const blocks = {define_variable: Blockly.Blocks['define_variable'] };

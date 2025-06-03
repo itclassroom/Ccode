@@ -79,7 +79,10 @@ cGenerator.forBlock['math_variable'] = function(block, generator) {
 
 cGenerator.forBlock['math_constant'] = function(block, generator) {
   const selectedConstant = block.getFieldValue('constant');
+  if (block.outputConnection && block.outputConnection.targetConnection) {
   return [selectedConstant, 0];
+  }
+  return null;
 };
 
 cGenerator.forBlock['variable_name_input'] = function(block, generator) {
@@ -88,10 +91,6 @@ cGenerator.forBlock['variable_name_input'] = function(block, generator) {
         return [varName, 0];
     }
     return varName;
-};
-cGenerator.forBlock['text'] = function(block, generator) {
-  const textValue = block.getFieldValue('TEXT');  
-  return [textValue, 0];  
 };
 
 cGenerator.forBlock['assignment'] = function(block, generator) {
@@ -103,4 +102,18 @@ cGenerator.forBlock['assignment'] = function(block, generator) {
         code += generator.blockToCode(nextBlock);
     }
   return code;
+};
+
+cGenerator.forBlock['literal_value'] = function(block, generator) {
+  const value = block.getFieldValue('VALUE');
+  if (block.outputConnection && block.outputConnection.targetConnection){
+  if (isNaN(parseFloat(value)) || !isFinite(value)) {
+    // Escape double quotes within the string
+    const escapedValue = value.replace(/"/g, '\\"');
+    return ['"' + escapedValue + '"', 0]; // Return as C string literal
+  } else {
+    return [value, 0]; // Return as number
+  }
+  }
+  return null;
 };

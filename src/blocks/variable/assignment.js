@@ -12,7 +12,7 @@ Blockly.Blocks['assignment'] = {
     this.appendDummyInput()
         .appendField('=');
     this.appendValueInput('VALUE')
-        .setCheck('Number');
+        .setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(160);
@@ -24,8 +24,8 @@ Blockly.Blocks['assignment'] = {
     varShadow.setShadow(true);
     this.getInput('VAR').connection.connect(varShadow.outputConnection);
 
-    // Shadow block for integer value
-    const valueShadow = this.workspace.newBlock('math_constant');
+    // Shadow block for literal value
+    const valueShadow = this.workspace.newBlock('literal_value');
     valueShadow.setShadow(true);
     this.getInput('VALUE').connection.connect(valueShadow.outputConnection);
   }

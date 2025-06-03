@@ -57,7 +57,7 @@ export const toolbox = {
       "contents":[
         {
           "kind" : "block",
-          "type" : "math_variable"
+          "type" : "define_variable"
         },
         {
           "kind" : "block",
@@ -66,6 +66,14 @@ export const toolbox = {
         {
           "kind" : "block",
           "type" : "assignment"
+        },
+        {
+          "kind" : "block",
+          "type" : "literal_value"
+        },
+        {
+          "kind" : "block",
+          "type" : "math_constant"
         },
       ]
     }
