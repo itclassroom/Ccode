@@ -3,12 +3,12 @@
  * Copyright 2023 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as Blockly from 'blockly/core';
+import * as Blockly from 'blockly';
 
 Blockly.Blocks['assignment'] = {
   init: function() {
     this.appendValueInput('VAR')
-        .setCheck('String');
+        .setCheck('VariableName');
     this.appendDummyInput()
         .appendField('=');
     this.appendValueInput('VALUE')
@@ -20,14 +20,16 @@ Blockly.Blocks['assignment'] = {
     this.setHelpUrl('');
 
     // Shadow block for variable name
-    const varShadow = this.workspace.newBlock('variable_name_input');
-    varShadow.setShadow(true);
-    this.getInput('VAR').connection.connect(varShadow.outputConnection);
+    const varShadowDom = Blockly.utils.xml.textToDom(
+      '<shadow type="variable_name_input"><field name="VAR_NAME"></field></shadow>'
+    );
+    this.getInput('VAR').connection.setShadowDom(varShadowDom);
 
     // Shadow block for literal value
-    const valueShadow = this.workspace.newBlock('literal_value');
-    valueShadow.setShadow(true);
-    this.getInput('VALUE').connection.connect(valueShadow.outputConnection);
+    const valueShadowDom = Blockly.utils.xml.textToDom(
+      '<shadow type="literal_value"><field name="VALUE">0</field></shadow>'
+    );
+    this.getInput('VALUE').connection.setShadowDom(valueShadowDom);
   }
 };
 export const blocks = {assignment: Blockly.Blocks[ 'assignment']};

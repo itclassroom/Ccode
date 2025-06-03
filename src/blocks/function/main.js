@@ -13,6 +13,7 @@ import * as Blockly from 'blockly/core';
 Blockly.Blocks['main'] = {
   init: function() {
     this.appendDummyInput()
+        .appendField(new Blockly.FieldImage('https://www.gstatic.com/codesite/ph/images/star_on.gif', 15, 15, { alt: 'int main (void)', flipRtl: 'FALSE'}))
         .appendField(new Blockly.FieldTextInput(""), "type1")
         .appendField("main (")
         .appendField(new Blockly.FieldTextInput(""), "type2")

@@ -1,31 +1,17 @@
 import * as Blockly from 'blockly';
-import { blocks as printBlocks } from './blocks/IO/printf';
-import { blocks as mainBlocks } from './blocks/function/main';
-import { blocks as returnBlocks } from './blocks/function/return';
-import { blocks as stdioBlocks } from './blocks/library/stdio';
-import { blocks as define_variableBlocks } from './blocks/variable/define_variable.js';
-import { blocks as math_constantBlocks } from './blocks/variable/math_constant.js';
-import { blocks as variable_name_inputBlocks } from './blocks/variable/variable.js'
-import { blocks as assignmentBlocks } from './blocks/variable/assignment.js';
-import { blocks as literal_valueBlocks } from './blocks/variable/literal_value.js';
+// Import block definition modules using barrel files
+import './blocks/IO'; // This will execute src/blocks/IO/index.js
+import './blocks/function'; // This will execute src/blocks/function/index.js
+import './blocks/library';  // This will execute src/blocks/library/index.js
+import './blocks/variable'; // This will execute src/blocks/variable/index.js
 import { cGenerator } from './generators/cgenerators';
 import { save, load } from './serialization';
 import { toolbox } from './toolbox';
 import './index.css';
 import { executeCCode } from './api.js';
 
-// Combine and register the blocks with Blockly
-const blocks = {
-  ...printBlocks,
-  ...mainBlocks,
-  ...stdioBlocks,
-  ...returnBlocks,
-  ...define_variableBlocks,
-  ...math_constantBlocks,
-  ...variable_name_inputBlocks,
-  ...assignmentBlocks,
-  ...literal_valueBlocks
-};
+// Block definitions are registered with Blockly when their respective modules are imported.
+// The explicit `blocks` object is no longer needed here for registration.
 
 const myTheme = Blockly.Theme.defineTheme('largeTextTheme', {
   base: Blockly.Themes.Classic,
@@ -38,8 +24,6 @@ const myTheme = Blockly.Theme.defineTheme('largeTextTheme', {
 }
 });
 
-
-
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode').firstChild;
 const outputDiv = document.getElementById('output');
@@ -49,7 +33,6 @@ const ws = Blockly.inject(blocklyDiv, {
                           theme: myTheme, 
                           renderer: 'zelos'
                           });
-
 
 // Function to update the code display
 const runCode = () => {

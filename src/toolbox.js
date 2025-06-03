@@ -25,6 +25,10 @@ export const toolbox = {
           "kind" : "block",
           "type" : "stdio"
         },
+        {
+          "kind" : "block",
+          "type" : "mathlib"
+        },
       ]
     },             //outter blanket
     {
@@ -49,6 +53,10 @@ export const toolbox = {
           "kind" : "block", 
           "type" : "printf"  
         },                 //end of the block
+        {
+          "kind" : "block",
+          "type" : "scanf"
+        }
       ]
     },
     {

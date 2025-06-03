@@ -3,7 +3,7 @@
  * Copyright 2023 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as Blockly from 'blockly/core';
+import * as Blockly from 'blockly';
 
 
 Blockly.Blocks['variable_name_input'] = {
@@ -11,7 +11,7 @@ Blockly.Blocks['variable_name_input'] = {
     this.appendDummyInput()
         .appendField("變數名稱: ")
         .appendField(new Blockly.FieldTextInput(""), "VAR_NAME");
-    this.setOutput(true, "String");
+    this.setOutput(true, "VariableName");
     this.setColour(12);
     this.setTooltip("輸入一個變數名稱");
     this.setHelpUrl("");
