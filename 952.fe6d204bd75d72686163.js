@@ -1,0 +1,2 @@
+/*! For license information please see 952.fe6d204bd75d72686163.js.LICENSE.txt */
+"use strict";(self.webpackChunkc_ode=self.webpackChunkc_ode||[]).push([[952],{952:(e,s,a)=>{a.r(s),a.d(s,{load:()=>c,save:()=>t});var o=a(671);const n="mainWorkspace",t=function(e){const s=o.serialization.workspaces.save(e);window.localStorage?.setItem(n,JSON.stringify(s))},c=function(e){const s=window.localStorage?.getItem(n);s&&(o.Events.disable(),o.serialization.workspaces.load(JSON.parse(s),e,!1),o.Events.enable())}}}]);
